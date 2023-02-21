@@ -20,6 +20,7 @@ app.use("/api/auth", require("./routes/auth.route"));
 app.use("/api/users", require("./routes/users.route"));
 app.use("/api/teams", require("./routes/teams.route"));
 app.use("/api/meetings", require("./routes/meetings.route"));
+app.use("/api/calendar", require("./routes/calendar.route"));
 app.use(require("./middleware/errors").resourceNotFound);
 app.use(require("./middleware/errors").errorHandler);
 const PORT = process.env.PORT || 5001;
