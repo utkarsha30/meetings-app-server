@@ -1,23 +1,19 @@
 const userService = require("../services/users.service");
 const JWT = require("jsonwebtoken");
-const registerNewUser = async (req, res) => {
+const { Errors } = require("../constants");
+const registerNewUser = async (req, res, next) => {
   if (Object.keys(req.body).length === 0) {
-    return res.status(400).json({
-      status: "error",
-      message: `Request body is missing, and needs to have the new workshop's details`,
-    });
+    const error = new Error(
+      `Request body is missing, and needs to to register new user`
+    );
+    error.name = Errors.BadRequest;
+    return next(error);
   }
   try {
     const newUser = await userService.registerNewUser(req.body);
-    res.status(201).json({
-      status: "success",
-      data: newUser,
-    });
+    res.status(201).json(newUser);
   } catch (error) {
-    res.status(400).json({
-      status: "error",
-      message: error.message,
-    });
+    return next(error);
   }
 };
 const getAllUsers = async (req, res) => {
@@ -25,18 +21,16 @@ const getAllUsers = async (req, res) => {
     const allUsers = await userService.getAllUsers();
     res.status(200).json(allUsers);
   } catch (error) {
-    res.status(400).json({
-      status: "error",
-      message: error.message,
-    });
+    return next(error);
   }
 };
-const validateUser = async (req, res) => {
+const validateUser = async (req, res, next) => {
   if (Object.keys(req.body).length === 0) {
-    return res.status(400).json({
-      status: "error",
-      message: `Request body is missing, `,
-    });
+    const error = new Error(
+      `Request body is missing, and needs to have login details`
+    );
+    error.name = Errors.BadRequest;
+    return next(error);
   }
   try {
     const user = await userService.validateUser(req.body);
@@ -59,13 +53,8 @@ const validateUser = async (req, res) => {
       (err, token) => {
         if (err) {
           err.name = Errors.InternalServerError;
-          return res.status(400).json({
-            status: "error",
-            message: err.name,
-          });
+          return next(err);
         }
-        var userEmail = user.email;
-        exports.userEmail = userEmail;
         res.json({
           id: user._id,
           name: user.name,
@@ -75,10 +64,9 @@ const validateUser = async (req, res) => {
       }
     );
   } catch (error) {
-    res.status(400).json({
-      status: "error",
-      message: error.message,
-    });
+    const err = new Error("Something went wrong during login");
+    err.name = Errors.InternalServerError;
+    return next(err);
   }
 };
 
