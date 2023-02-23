@@ -12,10 +12,24 @@ const postNewTeam = async (req, res, next) => {
   try {
     //res.locals.clamins have local instance of logged in user
     const loggedinUser = res.locals.claims;
-    req.body.members.push({
+    const allUsers = await usersService.getAllUsers();
+    const userEmails = req.body.members;
+    let members = [];
+    userEmails.forEach((email) => {
+      allUsers.forEach((user) => {
+        if (user.email === email) {
+          members.push({
+            userId: user._id,
+            email: user.email,
+          });
+        }
+      });
+    });
+    members.push({
       userId: loggedinUser._id,
       email: loggedinUser.email,
     });
+    req.body.members = members;
 
     const newTeam = await teamsService.postNewTeam(req.body);
     res.status(201).json(newTeam);

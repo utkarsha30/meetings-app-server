@@ -13,10 +13,26 @@ const postNewMeeting = async (req, res, next) => {
   try {
     //res.locals.clamins have local instance of logged in user
     const loggedinUser = res.locals.claims;
-    req.body.attendees.push({
+    const allUsers = await usersService.getAllUsers();
+    const userEmails = req.body.attendees;
+    let attendees = [];
+    userEmails.forEach((email) => {
+      allUsers.forEach((user) => {
+        if (user.email === email) {
+          attendees.push({
+            userId: user._id,
+            email: user.email,
+          });
+        }
+      });
+    });
+
+    attendees.push({
       userId: loggedinUser._id,
       email: loggedinUser.email,
     });
+    req.body.attendees = attendees;
+
     const newMeeting = await meetingsService.postNewMeeting(req.body);
     res.status(201).json(newMeeting);
   } catch (error) {

@@ -99,7 +99,6 @@ const getMeetingFromFuture = (todaysDate, search, id) => {
   });
 };
 const getMeetingForPresent = (todaysDate, search, id) => {
-  console.log(todaysDate);
   return Meetings.find({
     $and: [
       {
