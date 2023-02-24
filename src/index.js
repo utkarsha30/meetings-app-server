@@ -1,6 +1,4 @@
 require("dotenv/config");
-//--------------
-const history = require("connect-history-api-fallback");
 const express = require("express");
 const cors = require("cors");
 // connecting to database
@@ -12,19 +10,12 @@ const app = express();
 app.use(cors({ origin: "*" }));
 //for request body data
 app.use(express.json());
-//----------------
-app.use(history());
-//----------------
-app.use(express.static("src"));
-//--------------
+
 app.get("/", (req, res) => {
-  res.sendFile("src/index.html");
+  res.send(
+    '<div style="width:200px; margin: auto auto;"><img width="100%"  src="https://media.tenor.com/2jd3xi2WVt0AAAAC/recurring-settings.gif"></div><div style="width:220px; margin: 0 auto;"><h2>Server is Running...</h2></div>'
+  );
 });
-// app.get("/", (req, res) => {
-//   res.send(
-//     '<div style="width:200px; margin: auto auto;"><img width="100%"  src="https://media.tenor.com/2jd3xi2WVt0AAAAC/recurring-settings.gif"></div><div style="width:220px; margin: 0 auto;"><h2>Server is Running...</h2></div>'
-//   );
-// });
 //routes
 app.use("/api/auth", require("./routes/auth.route"));
 app.use("/api/users", require("./routes/users.route"));
