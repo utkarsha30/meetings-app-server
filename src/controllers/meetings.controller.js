@@ -126,6 +126,13 @@ const getMeeting = async (req, res, next) => {
         );
         res.status(200).json(presentMeetings);
         break;
+      case "all":
+        const all = await meetingsService.getAllMeetings(
+          search,
+          loggedinUser._id
+        );
+        res.status(200).json(all);
+        break;
       default:
         const allMeetings = await meetingsService.getAllMeetings(
           search,

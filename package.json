@@ -1,7 +1,7 @@
 {
   "name": "meetings-app-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend of Meetings App",
   "main": "src/index.js",
   "scripts": {
     "start": "node .",

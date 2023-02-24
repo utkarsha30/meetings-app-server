@@ -24,6 +24,7 @@ const meetingsSchema = mongoose.Schema({
     {
       userId: String,
       email: String,
+      _id: false,
     },
   ],
 });
